@@ -1,5 +1,6 @@
+import Foundation
+
 enum RequestConstants {
-    static let baseURL = "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net"
-    #warning("Instert your token here")
-    static let token = ""
+    static let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
+    static let token = Bundle.main.object(forInfoDictionaryKey: "TOKEN") as? String ?? ""
 }
