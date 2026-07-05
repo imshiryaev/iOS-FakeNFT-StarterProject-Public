@@ -5,7 +5,7 @@
 import Foundation
 
 protocol UserServiceProtocol {
-    func fetchUsers(page: Int, size: Int) -> [User]
+    func fetchUsers(page: Int, size: Int, completion: @escaping (Result<[User], Error>) -> Void)
 }
 
 final class UserService: UserServiceProtocol {
@@ -16,9 +16,10 @@ final class UserService: UserServiceProtocol {
         self.networkClient = networkClient
     }
     
-    func fetchUsers(page: Int, size: Int) -> [User] {
+    func fetchUsers(page: Int, size: Int, completion: @escaping (Result<[User], any Error>) -> Void) {
+        let userRequest = UserRequest(page: page, size: size)
         
-        networkClient.send
+        networkClient.send(request: userRequest, type: [User].self, onResponse: completion)
     }
     
     
