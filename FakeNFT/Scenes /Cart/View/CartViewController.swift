@@ -11,9 +11,7 @@ final class CartViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     
-    private var cartNFTs = CartMockData.nftList
-    
-    private var currentSort: CartSortType = .price
+    private let presenter = CartPresenter()
     
     //MARK: - UI Elements
     
@@ -91,7 +89,9 @@ final class CartViewController: UIViewController {
         super.viewDidLoad()
         
         setupUI()
-        updateInfo()
+        
+        presenter.view = self
+        presenter.viewDidLoad()
     }
     
     //MARK: - init
@@ -156,13 +156,13 @@ final class CartViewController: UIViewController {
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "По цене", style: .default) { _ in
-            self.sort(by: .price)}
+            self.presenter.sort(by: .price)}
         )
         alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { _ in
-            self.sort(by: .rating)}
+            self.presenter.sort(by: .rating)}
         )
         alert.addAction(UIAlertAction( title: "По названию", style: .default) { _ in
-            self.sort(by: .title)}
+            self.presenter.sort(by: .title)}
         )
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
         
@@ -175,26 +175,6 @@ final class CartViewController: UIViewController {
     
     //MARK: - Other Functions
     
-    private func updateInfo() {
-        let isEmpty = cartNFTs.isEmpty
-        
-        emptyCartLabel.isHidden = !isEmpty
-        tableView.isHidden = isEmpty
-        bottomView.isHidden = isEmpty
-        
-        navigationItem.rightBarButtonItem = isEmpty ? nil : filterButton
-        
-        guard !isEmpty else { return }
-        
-        countLabel.text = "\(cartNFTs.count) NFT"
-        
-        let totalPrice = cartNFTs.reduce(0) { $0 + $1.price }
-        
-        if let total = priceFormatter.string(from: NSNumber(value: totalPrice)) {
-            totalLabel.text = "\(total) ETH"
-        }
-    }
-    
     private let priceFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -203,61 +183,24 @@ final class CartViewController: UIViewController {
         formatter.decimalSeparator = ","
         return formatter
     }()
-    
-    private func sort(by type: CartSortType) {
-        switch type {
-        case .price:
-            cartNFTs.sort { $0.price < $1.price }
-            
-        case .rating:
-            cartNFTs.sort { $0.rating > $1.rating }
-            
-        case .title:
-            cartNFTs.sort { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
-        }
-        
-        currentSort = type
-        tableView.reloadData()
-    }
-    
-    private func showDeleteScreen(for index: Int) {
-        let nft = cartNFTs[index]
-        
-        let vc = DeleteViewController(nft: nft)
-        vc.modalPresentationStyle = .overFullScreen
-        vc.modalTransitionStyle = .crossDissolve
-        
-        vc.onDelete = { [weak self] in
-            self?.deleteNFT(at: index)
-        }
-        
-        present(vc, animated: true)
-    }
-    
-    private func deleteNFT(at index: Int) {
-        cartNFTs.remove(at: index)
-        
-        updateInfo()
-        tableView.reloadData()
-    }
 }
 
 //MARK: - TableView
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        cartNFTs.count
+        presenter.numberOfItems
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CartTableViewCell.reuseIdentifier, for: indexPath) as? CartTableViewCell else {
             return UITableViewCell()
         }
-        let nft = cartNFTs[indexPath.row]
+        let nft = presenter.nft(at: indexPath.row)
         
         cell.configure(with: nft)
         cell.onDeleteTap = { [weak self] in
-            self?.showDeleteScreen(for: indexPath.row)
+            self?.presenter.didTapDelete(at: indexPath.row)
         }
         return cell
     }
@@ -266,5 +209,43 @@ extension CartViewController: UITableViewDataSource {
 extension CartViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         140
+    }
+}
+
+//MARK: - Protocol
+
+extension CartViewController: CartViewProtocol {
+    
+    func reloadData() {
+        tableView.reloadData()
+    }
+    
+    func updateCartInfo(count: Int, totalPrice: Double) {
+        countLabel.text = "\(count) NFT"
+        
+        if let total = priceFormatter.string(
+            from: NSNumber(value: totalPrice)) {
+            totalLabel.text = "\(total) ETH"
+        }
+    }
+    
+    func showEmptyState(_ isEmpty: Bool) {
+        
+        emptyCartLabel.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
+        bottomView.isHidden = isEmpty
+        
+        navigationItem.rightBarButtonItem = isEmpty ? nil : filterButton
+    }
+    
+    func showDeleteScreen(for nft: CartNFT, index: Int) {
+        let vc = DeleteViewController(nft: nft)
+        
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        vc.onDelete = { [weak self] in
+            self?.presenter.deleteNFT(at: index)
+        }
+        present(vc, animated: true)
     }
 }
