@@ -74,6 +74,17 @@ final class CartViewController: UIViewController {
         return button
     }()
     
+    private lazy var emptyCartLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Корзина пуста"
+        label.font = .bodyBold
+        label.textColor = .textPrimary
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
+    }()
+    
     //MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -100,6 +111,7 @@ final class CartViewController: UIViewController {
     private func setupUI() {
         view.addSubview(tableView)
         view.addSubview(bottomView)
+        view.addSubview(emptyCartLabel)
         
         bottomView.addSubview(countLabel)
         bottomView.addSubview(totalLabel)
@@ -130,35 +142,31 @@ final class CartViewController: UIViewController {
             payButton.heightAnchor.constraint(equalToConstant: 44),
             payButton.widthAnchor.constraint(equalToConstant: 240),
             payButton.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 16),
-            payButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -16)
+            payButton.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor, constant: -16),
             
+            emptyCartLabel.heightAnchor.constraint(equalToConstant: 22),
+            emptyCartLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyCartLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     //MARK: - Actions
     
     @objc private func filterButtonTapped() {
-        
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "По цене", style: .default) { _ in
-            self.sort(by: .price)
-        }
-            )
-
-            alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { _ in
-                self.sort(by: .rating)
-                }
-            )
-
-            alert.addAction(UIAlertAction( title: "По названию", style: .default) { _ in
-                self.sort(by: .title)
-                }
-            )
-
-            alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
-
-            present(alert, animated: true)
+            self.sort(by: .price)}
+        )
+        alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { _ in
+            self.sort(by: .rating)}
+        )
+        alert.addAction(UIAlertAction( title: "По названию", style: .default) { _ in
+            self.sort(by: .title)}
+        )
+        alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+        
+        present(alert, animated: true)
     }
     
     @objc private func payButtonTapped() {
@@ -168,13 +176,23 @@ final class CartViewController: UIViewController {
     //MARK: - Other Functions
     
     private func updateInfo() {
+        let isEmpty = cartNFTs.isEmpty
+        
+        emptyCartLabel.isHidden = !isEmpty
+        tableView.isHidden = isEmpty
+        bottomView.isHidden = isEmpty
+        
+        navigationItem.rightBarButtonItem = isEmpty ? nil : filterButton
+        
+        guard !isEmpty else { return }
+        
         countLabel.text = "\(cartNFTs.count) NFT"
         
         let totalPrice = cartNFTs.reduce(0) { $0 + $1.price }
         
         if let total = priceFormatter.string(from: NSNumber(value: totalPrice)) {
-                totalLabel.text = "\(total) ETH"
-            }
+            totalLabel.text = "\(total) ETH"
+        }
     }
     
     private let priceFormatter: NumberFormatter = {
@@ -201,7 +219,30 @@ final class CartViewController: UIViewController {
         currentSort = type
         tableView.reloadData()
     }
+    
+    private func showDeleteScreen(for index: Int) {
+        let nft = cartNFTs[index]
+        
+        let vc = DeleteViewController(nft: nft)
+        vc.modalPresentationStyle = .overFullScreen
+        vc.modalTransitionStyle = .crossDissolve
+        
+        vc.onDelete = { [weak self] in
+            self?.deleteNFT(at: index)
+        }
+        
+        present(vc, animated: true)
+    }
+    
+    private func deleteNFT(at index: Int) {
+        cartNFTs.remove(at: index)
+        
+        updateInfo()
+        tableView.reloadData()
+    }
 }
+
+//MARK: - TableView
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -215,7 +256,9 @@ extension CartViewController: UITableViewDataSource {
         let nft = cartNFTs[indexPath.row]
         
         cell.configure(with: nft)
-        
+        cell.onDeleteTap = { [weak self] in
+            self?.showDeleteScreen(for: indexPath.row)
+        }
         return cell
     }
 }

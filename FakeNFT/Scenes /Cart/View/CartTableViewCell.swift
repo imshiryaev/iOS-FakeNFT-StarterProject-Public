@@ -11,6 +11,8 @@ final class CartTableViewCell: UITableViewCell {
     
     static let reuseIdentifier = "CartTableViewCell"
     
+    var onDeleteTap: (() -> Void)?
+    
     //MARK: - UI Elements
     
     private lazy var nftImageView: UIImageView = {
@@ -144,14 +146,13 @@ final class CartTableViewCell: UITableViewCell {
             deleteButton.widthAnchor.constraint(equalToConstant: 40),
             deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-            
         ])
     }
     
     //MARK: - Actions
     
     @objc private func deleteButtonTapped() {
-        
+        onDeleteTap?()
     }
     
     //MARK: - Other functions
