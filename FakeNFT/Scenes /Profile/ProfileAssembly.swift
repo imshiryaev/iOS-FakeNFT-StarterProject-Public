@@ -15,6 +15,13 @@ public final class ProfileAssembly {
         )
         let viewController = ProfileViewController(presenter: presenter)
         presenter.view = viewController
+
+        let servicesAssembler = servicesAssembler
+        viewController.makeEditScreen = { profileId, profile, onProfileUpdated in
+            ProfileEditAssembly(servicesAssembler: servicesAssembler)
+                .build(with: profileId, profile: profile, onProfileUpdated: onProfileUpdated)
+        }
+
         return viewController
     }
 }

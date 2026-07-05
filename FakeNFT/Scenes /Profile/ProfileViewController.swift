@@ -6,12 +6,15 @@ protocol ProfileView: AnyObject, ErrorView, LoadingView {
     func reloadMenu()
     func showTableView()
     func openWebsite(_ url: URL)
+    func showEditProfile(profileId: String, profile: Profile)
 }
 
 final class ProfileViewController: UIViewController {
 
     private let presenter: ProfilePresenter
     private let contentView = ProfileContentView()
+
+    var makeEditScreen: ((String, Profile, @escaping (Profile) -> Void) -> UIViewController)?
 
     internal var activityIndicator: UIActivityIndicatorView {
         contentView.activityIndicator
@@ -49,9 +52,9 @@ final class ProfileViewController: UIViewController {
         editButton.tintColor = .textPrimary
         editButton.frame = CGRect(x: 0, y: 0, width: 24, height: 24)
         editButton.onTap = { [weak self] in
-            self?.editTapped()
+            self?.presenter.didTapEdit()
         }
-        navigationItem.rightBarButtonItem = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: editButton)
     }
 
     private func setupBindings() {
@@ -60,10 +63,6 @@ final class ProfileViewController: UIViewController {
         contentView.onWebsiteTap = { [weak self] in
             self?.presenter.didTapWebsite()
         }
-    }
-
-    private func editTapped() {
-        // Экран редактирования профиля будет добавлен в Части 2.
     }
 }
 
@@ -85,6 +84,14 @@ extension ProfileViewController: ProfileView {
     func openWebsite(_ url: URL) {
         let safariController = SFSafariViewController(url: url)
         present(safariController, animated: true)
+    }
+
+    func showEditProfile(profileId: String, profile: Profile) {
+        guard let makeEditScreen else { return }
+        let editScreen = makeEditScreen(profileId, profile) { [weak self] updatedProfile in
+            self?.presenter.didUpdateProfile(updatedProfile)
+        }
+        present(editScreen, animated: true)
     }
 }
 

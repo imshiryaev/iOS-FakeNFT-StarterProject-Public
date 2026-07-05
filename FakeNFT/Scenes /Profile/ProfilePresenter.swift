@@ -7,6 +7,8 @@ protocol ProfilePresenter {
     func viewDidLoad()
     func menuItem(for row: ProfileMenuRow) -> ProfileMenuItemViewModel
     func didTapWebsite()
+    func didTapEdit()
+    func didUpdateProfile(_ profile: Profile)
     func didSelect(row: ProfileMenuRow)
 }
 
@@ -65,6 +67,15 @@ final class ProfilePresenterImpl: ProfilePresenter {
     func didTapWebsite() {
         guard let website = profile?.website, let url = URL(string: website) else { return }
         view?.openWebsite(url)
+    }
+
+    func didTapEdit() {
+        guard let profile else { return }
+        view?.showEditProfile(profileId: profileId, profile: profile)
+    }
+
+    func didUpdateProfile(_ profile: Profile) {
+        state = .data(profile)
     }
 
     func didSelect(row: ProfileMenuRow) {
