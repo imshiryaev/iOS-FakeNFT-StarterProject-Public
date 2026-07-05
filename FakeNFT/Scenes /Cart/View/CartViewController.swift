@@ -11,18 +11,9 @@ final class CartViewController: UIViewController {
     
     private let servicesAssembly: ServicesAssembly
     
-    private struct MockNFT {
-        let title: String
-        let price: String
-        let rating: Int
-        let image: UIImage?
-    }
+    private var cartNFTs = CartMockData.nftList
     
-    private let mockNFTs: [MockNFT] = [
-        MockNFT(title: "April", price: "1.78 ETH", rating: 1, image: UIImage(resource: .mockNFTPic)),
-        MockNFT(title: "Greena", price: "1.78 ETH", rating: 3, image: UIImage(resource: .mockNFTPic)),
-        MockNFT(title: "Spring", price: "1.78 ETH", rating: 5, image: UIImage(resource: .mockNFTPic))
-    ]
+    private var currentSort: CartSortType = .price
     
     //MARK: - UI Elements
     
@@ -87,7 +78,9 @@ final class CartViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
+        updateInfo()
     }
     
     //MARK: - init
@@ -146,27 +139,82 @@ final class CartViewController: UIViewController {
     
     @objc private func filterButtonTapped() {
         
+        let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "По цене", style: .default) { _ in
+            self.sort(by: .price)
+        }
+            )
+
+            alert.addAction(UIAlertAction(title: "По рейтингу", style: .default) { _ in
+                self.sort(by: .rating)
+                }
+            )
+
+            alert.addAction(UIAlertAction( title: "По названию", style: .default) { _ in
+                self.sort(by: .title)
+                }
+            )
+
+            alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel))
+
+            present(alert, animated: true)
     }
     
     @objc private func payButtonTapped() {
-        
+        print("Оплата")
     }
+    
     //MARK: - Other Functions
     
+    private func updateInfo() {
+        countLabel.text = "\(cartNFTs.count) NFT"
+        
+        let totalPrice = cartNFTs.reduce(0) { $0 + $1.price }
+        
+        if let total = priceFormatter.string(from: NSNumber(value: totalPrice)) {
+                totalLabel.text = "\(total) ETH"
+            }
+    }
+    
+    private let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = ","
+        return formatter
+    }()
+    
+    private func sort(by type: CartSortType) {
+        switch type {
+        case .price:
+            cartNFTs.sort { $0.price < $1.price }
+            
+        case .rating:
+            cartNFTs.sort { $0.rating > $1.rating }
+            
+        case .title:
+            cartNFTs.sort { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        }
+        
+        currentSort = type
+        tableView.reloadData()
+    }
 }
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        mockNFTs.count
+        cartNFTs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CartTableViewCell.reuseIdentifier, for: indexPath) as? CartTableViewCell else {
             return UITableViewCell()
         }
-        let nft = mockNFTs[indexPath.row]
+        let nft = cartNFTs[indexPath.row]
         
-        cell.configure(title: nft.title, price: nft.price, rating: nft.rating, image: nft.image)
+        cell.configure(with: nft)
         
         return cell
     }

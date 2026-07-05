@@ -98,6 +98,9 @@ final class CartTableViewCell: UITableViewCell {
     //MARK: - UI Setup
     
     private func setupUI() {
+        selectionStyle = .none
+        backgroundColor = .clear
+        
         contentView.addSubview(nftImageView)
         contentView.addSubview(nftStackView)
         contentView.addSubview(deleteButton)
@@ -106,6 +109,10 @@ final class CartTableViewCell: UITableViewCell {
         nftStackView.addArrangedSubview(nftRatingStackView)
         nftStackView.addArrangedSubview(nftPriceTitleLabel)
         nftStackView.addArrangedSubview(nftPriceValueLabel)
+        
+        nftStackView.setCustomSpacing(4, after: nftTitleLabel)
+        nftStackView.setCustomSpacing(12, after: nftRatingStackView)
+        nftStackView.setCustomSpacing(2, after: nftPriceTitleLabel)
         
         for _ in 0..<5 {
             let imageView = UIImageView()
@@ -149,16 +156,16 @@ final class CartTableViewCell: UITableViewCell {
     
     //MARK: - Other functions
     
-    func configure(title: String,
-                   price: String,
-                   rating: Int,
-                   image: UIImage?
-    ) {
-        nftTitleLabel.text = title
-        nftPriceValueLabel.text = price
-        nftImageView.image = image
+    func configure(with nft: CartNFT) {
         
-        configureRating(rating)
+        nftTitleLabel.text = nft.title
+        
+        if let price = priceFormatter.string(from: NSNumber(value: nft.price)) {
+            nftPriceValueLabel.text = "\(price) ETH"
+        }
+        nftImageView.image = nft.image
+        
+        configureRating(nft.rating)
     }
     
     private func configureRating(_ rating: Int) {
@@ -168,4 +175,13 @@ final class CartTableViewCell: UITableViewCell {
             : UIImage(resource: .ratingStarNoActive)
         }
     }
+    
+    private let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        formatter.decimalSeparator = ","
+        return formatter
+    }()
 }
