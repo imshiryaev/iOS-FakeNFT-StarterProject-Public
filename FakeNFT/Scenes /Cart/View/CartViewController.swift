@@ -172,6 +172,7 @@ final class CartViewController: UIViewController {
     @objc private func payButtonTapped() {
         let paymentVC = PaymentViewController()
         
+        paymentVC.hidesBottomBarWhenPushed = true
         paymentVC.onPaymentFinished = { [weak self] in
             self?.presenter.clearCart()
         }

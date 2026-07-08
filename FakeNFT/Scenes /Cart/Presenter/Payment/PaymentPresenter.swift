@@ -41,7 +41,7 @@ final class PaymentPresenter: PaymentPresenterProtocol {
             return
         }
         
-        let success = Bool.random() //временная имитация ответа сервера
+        let success = Bool.random() //пока временная имитация ответа сервера
         if success {
             view?.showPaymentSuccess()
         } else {

@@ -15,6 +15,15 @@ final class PaymentViewController: UIViewController {
     
     //MARK: - UI Elements
     
+    private lazy var backButton: UIBarButtonItem = {
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(resource: .backButton), for: .normal)
+        button.tintColor = .black
+        
+        button.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        return UIBarButtonItem(customView: button)
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 7
@@ -69,6 +78,8 @@ final class PaymentViewController: UIViewController {
         super.viewDidLoad()
         title = "Выберите способ оплаты"
         
+        navigationItem.leftBarButtonItem = backButton
+        
         presenter.view = self
         presenter.viewDidLoad()
         
@@ -122,6 +133,10 @@ final class PaymentViewController: UIViewController {
     
     @objc private func payButtonTapped() {
         presenter.pay()
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
     //MARK: - Other functions
@@ -218,7 +233,10 @@ extension PaymentViewController: PaymentViewProtocol {
 
 extension PaymentViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith url: URL, in characterRange: NSRange) -> Bool {
-        UIApplication.shared.open(url)
+        let webVC = PaymentWebViewViewController(url: url)
+        
+        navigationController?.pushViewController(webVC, animated: true)
+        
         return false
     }
 }
