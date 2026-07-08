@@ -17,4 +17,6 @@ protocol CartPresenterProtocol {
     func sort(by type: CartSortType)
     func deleteNFT(at index: Int)
     func didTapDelete(at index: Int)
+    
+    func clearCart()
 }

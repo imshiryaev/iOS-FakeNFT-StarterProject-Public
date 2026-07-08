@@ -170,7 +170,13 @@ final class CartViewController: UIViewController {
     }
     
     @objc private func payButtonTapped() {
-        print("Оплата")
+        let paymentVC = PaymentViewController()
+        
+        paymentVC.onPaymentFinished = { [weak self] in
+            self?.presenter.clearCart()
+        }
+        
+        navigationController?.pushViewController(paymentVC, animated: true)
     }
     
     //MARK: - Other Functions
