@@ -52,6 +52,12 @@
 		AA000000D2A76DCD600EE0001 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000C2A76DCD600EE0001 /* ProfileViewController.swift */; };
 		AA000000F2A76DCD600EE0001 /* ProfileAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000E2A76DCD600EE0001 /* ProfileAssembly.swift */; };
 		AA00000112A76DCD600EE0001 /* ProfileContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000102A76DCD600EE0001 /* ProfileContentView.swift */; };
+		AA00000212A76DCD600EE0001 /* ProfilePutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000202A76DCD600EE0001 /* ProfilePutRequest.swift */; };
+		AA00000232A76DCD600EE0001 /* ProfileEditViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000222A76DCD600EE0001 /* ProfileEditViewModels.swift */; };
+		AA00000252A76DCD600EE0001 /* ProfileEditPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000242A76DCD600EE0001 /* ProfileEditPresenter.swift */; };
+		AA00000272A76DCD600EE0001 /* ProfileEditContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000262A76DCD600EE0001 /* ProfileEditContentView.swift */; };
+		AA00000292A76DCD600EE0001 /* ProfileEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00000282A76DCD600EE0001 /* ProfileEditViewController.swift */; };
+		AA000002B2A76DCD600EE0001 /* ProfileEditAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000002A2A76DCD600EE0001 /* ProfileEditAssembly.swift */; };
 		E19CD5AB2A98B56600CA39A5 /* NftImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */; };
 		E1A1B9DA2AA01CE400C3AFBC /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */; };
 		E1CD40DC2A96BECC00BE7FE8 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E1CD40DB2A96BECC00BE7FE8 /* Localizable.strings */; };
@@ -123,6 +129,12 @@
 		AA000000C2A76DCD600EE0001 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		AA000000E2A76DCD600EE0001 /* ProfileAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAssembly.swift; sourceTree = "<group>"; };
 		AA00000102A76DCD600EE0001 /* ProfileContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileContentView.swift; sourceTree = "<group>"; };
+		AA00000202A76DCD600EE0001 /* ProfilePutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePutRequest.swift; sourceTree = "<group>"; };
+		AA00000222A76DCD600EE0001 /* ProfileEditViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewModels.swift; sourceTree = "<group>"; };
+		AA00000242A76DCD600EE0001 /* ProfileEditPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditPresenter.swift; sourceTree = "<group>"; };
+		AA00000262A76DCD600EE0001 /* ProfileEditContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditContentView.swift; sourceTree = "<group>"; };
+		AA00000282A76DCD600EE0001 /* ProfileEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditViewController.swift; sourceTree = "<group>"; };
+		AA000002A2A76DCD600EE0001 /* ProfileEditAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditAssembly.swift; sourceTree = "<group>"; };
 		E19CD5AA2A98B56600CA39A5 /* NftImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		E1A1B9D92AA01CE400C3AFBC /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		E1CD40D82A96BE7D00BE7FE8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
@@ -353,6 +365,7 @@
 				3FC8C39029D2453B0081F015 /* ExamplePutRequest.swift */,
 				0C79EE602A76DCD600EE90EA /* NftByIdRequest.swift */,
 				AA00000022A76DCD600EE0001 /* ProfileRequest.swift */,
+				AA00000202A76DCD600EE0001 /* ProfilePutRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -366,8 +379,21 @@
 				AA000000E2A76DCD600EE0001 /* ProfileAssembly.swift */,
 				AA000000A2A76DCD600EE0001 /* ProfileMenuCell.swift */,
 				AA00000062A76DCD600EE0001 /* ProfileViewModels.swift */,
+				AA000002FF2A76DCD600EE0001 /* Edit */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		AA000002FF2A76DCD600EE0001 /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				AA00000282A76DCD600EE0001 /* ProfileEditViewController.swift */,
+				AA00000242A76DCD600EE0001 /* ProfileEditPresenter.swift */,
+				AA000002A2A76DCD600EE0001 /* ProfileEditAssembly.swift */,
+				AA00000262A76DCD600EE0001 /* ProfileEditContentView.swift */,
+				AA00000222A76DCD600EE0001 /* ProfileEditViewModels.swift */,
+			);
+			path = Edit;
 			sourceTree = "<group>";
 		};
 		E19CD5A92A98B55900CA39A5 /* Cell */ = {
@@ -548,6 +574,12 @@
 				AA000000D2A76DCD600EE0001 /* ProfileViewController.swift in Sources */,
 				AA000000F2A76DCD600EE0001 /* ProfileAssembly.swift in Sources */,
 				AA00000112A76DCD600EE0001 /* ProfileContentView.swift in Sources */,
+				AA00000212A76DCD600EE0001 /* ProfilePutRequest.swift in Sources */,
+				AA00000232A76DCD600EE0001 /* ProfileEditViewModels.swift in Sources */,
+				AA00000252A76DCD600EE0001 /* ProfileEditPresenter.swift in Sources */,
+				AA00000272A76DCD600EE0001 /* ProfileEditContentView.swift in Sources */,
+				AA00000292A76DCD600EE0001 /* ProfileEditViewController.swift in Sources */,
+				AA000002B2A76DCD600EE0001 /* ProfileEditAssembly.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
@@ -768,7 +800,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -797,7 +829,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
