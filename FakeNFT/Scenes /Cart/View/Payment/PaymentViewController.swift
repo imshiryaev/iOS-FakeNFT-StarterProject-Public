@@ -7,6 +7,10 @@
 
 import UIKit
 
+private enum Constants {
+    static let agreementURL = "https://yandex.ru/legal/practicum_termsofuse"
+}
+
 final class PaymentViewController: UIViewController {
     
     private let presenter = PaymentPresenter()
@@ -93,8 +97,9 @@ final class PaymentViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        nil
     }
     
     //MARK: - UI Setup
@@ -149,10 +154,15 @@ final class PaymentViewController: UIViewController {
                                              attributes: [.foregroundColor: UIColor.textPrimary,
                                                           .paragraphStyle: paragraphStyle])
         
+        var linkAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.systemBlue,
+                                                             .paragraphStyle: paragraphStyle]
+        
+        if let url = URL(string: Constants.agreementURL) {
+            linkAttributes[.link] = url
+        }
+        
         let linkText = NSAttributedString(string: "Пользовательского соглашения",
-                                          attributes: [.link: URL(string: "https://yandex.ru/legal/practicum_termsofuse")!,
-                                                       .foregroundColor: UIColor.systemBlue,
-                                                       .paragraphStyle: paragraphStyle])
+                                          attributes: linkAttributes)
         
         text.append(linkText)
         agreementTextView.attributedText = text
@@ -167,7 +177,10 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PaymentCVCell.reuseIdentifier, for: indexPath) as! PaymentCVCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PaymentCVCell.reuseIdentifier, for: indexPath) as? PaymentCVCell else {
+            return UICollectionViewCell()
+        }
+        
         let currency = presenter.currency(at: indexPath.row)
         let selected = presenter.isSelected(currency: currency)
         
