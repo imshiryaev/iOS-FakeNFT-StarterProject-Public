@@ -2,6 +2,17 @@
 "Tab.profile" = "Профиль";
 "Profile.myNft" = "Мои NFT";
 "Profile.favorites" = "Избранные NFT";
+"MyNfts.title" = "Мои NFT";
+"MyNfts.empty" = "У Вас ещё нет NFT";
+"MyNfts.price" = "Цена";
+"MyNfts.author" = "от %@";
+"Favorites.title" = "Избранные NFT";
+"Favorites.empty" = "У Вас ещё нет избранных NFT";
+"Sort.title" = "Сортировка";
+"Sort.byPrice" = "По цене";
+"Sort.byRating" = "По рейтингу";
+"Sort.byName" = "По названию";
+"Sort.close" = "Закрыть";
 "ProfileEdit.name" = "Имя";
 "ProfileEdit.description" = "Описание";
 "ProfileEdit.website" = "Сайт";
