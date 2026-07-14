@@ -57,4 +57,9 @@ final class CartPresenter: CartPresenterProtocol {
         view?.showEmptyState(cartNFTs.isEmpty)
         view?.reloadData()
     }
+    
+    func clearCart() {
+        cartNFTs.removeAll()
+        updateView()
+    }
 }
