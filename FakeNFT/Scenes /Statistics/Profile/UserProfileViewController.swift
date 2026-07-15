@@ -5,11 +5,12 @@ protocol UserProfileViewControllerProtocol: AnyObject {
 }
 
 final class UserProfileViewController: UIViewController, UserProfileViewControllerProtocol {
-    private let presenter: UserProfilePresenter
+    private let presenter: UserProfilePresenterProtocol
 
-    init(presenter: UserProfilePresenter) {
+    init(presenter: UserProfilePresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        view.backgroundColor = .white
     }
 
     @available(*, unavailable)

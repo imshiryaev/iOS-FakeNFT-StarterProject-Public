@@ -1,10 +1,10 @@
 import Foundation
 
-protocol UserProfileProtocol {
+protocol UserProfilePresenterProtocol {
     
 }
 
-final class UserProfilePresenter: UserProfileProtocol {
+final class UserProfilePresenter: UserProfilePresenterProtocol {
     weak var view: UserProfileViewControllerProtocol?
     private let input: UserProfileInput
 
