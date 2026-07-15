@@ -1,9 +1,11 @@
 import Foundation
 
 typealias NftCompletion = (Result<Nft, Error>) -> Void
+typealias NftsCompletion = (Result<[Nft], Error>) -> Void
 
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
+    func loadNfts(ids: [String], completion: @escaping NftsCompletion)
 }
 
 final class NftServiceImpl: NftService {
@@ -34,7 +36,7 @@ final class NftServiceImpl: NftService {
         }
     }
     
-    func loadNfts(ids: [String], completion: @escaping (Result<[Nft], Error>) -> Void) {
+    func loadNfts(ids: [String], completion: @escaping NftsCompletion) {
         guard !ids.isEmpty else {
             completion(.success([]))
             return
