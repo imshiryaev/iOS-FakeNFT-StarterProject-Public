@@ -1,65 +1,177 @@
-//
-//  StatisticsPresenter.swift
-//  FakeNFT
-//
-
 import Foundation
 
-protocol StatisticsPresenterProtocol {
+enum StatisticsState {
+    case initial
+    case loading
+    case data([User])
+    case empty
+    case failed(Error)
+}
+
+protocol StatisticsPresenterProtocol: AnyObject {
+    var view: StatisticsView? { get set }
+    var numberOfUsers: Int { get }
+    var currentSortType: StatisticsSortType { get }
+
     func viewDidLoad()
-    func loadUsers()
+    func loadMoreIfNeeded(index: Int)
+    func user(at index: Int) -> User
+    func didSelectUser(at index: Int)
+    func changeSorting(to sortType: StatisticsSortType)
 }
 
 final class StatisticsPresenter: StatisticsPresenterProtocol {
-    
-    weak var view: (StatisticsViewControllerProtocol & ErrorView)?
-    
-    var userService: UserServiceProtocol
-    
+
+    weak var view: StatisticsView?
+
+    private let userService: UserServiceProtocol
+
     private var users: [User] = []
-    private var page: Int = 0
-    private let size: Int = 15
-    private var isLoading = false
+    private var page = 0
+    private let size = 15
+
+    private var isLoadingPage = false
     private var hasMorePages = true
-    
+
+    private let sortTypeKey = "statisticsSortType"
+    private(set) var currentSortType: StatisticsSortType
+
+    private var state: StatisticsState = .initial {
+        didSet {
+            stateDidChanged()
+        }
+    }
+
     var numberOfUsers: Int {
         users.count
+    }
+
+    init(userService: UserServiceProtocol) {
+        self.userService = userService
+
+        if let savedValue = UserDefaults.standard.string(forKey: sortTypeKey),
+           let savedSortType = StatisticsSortType(rawValue: savedValue) {
+            currentSortType = savedSortType
+        } else {
+            currentSortType = .rating
+        }
+    }
+
+    func viewDidLoad() {
+        state = .loading
     }
 
     func user(at index: Int) -> User {
         users[index]
     }
-    
-    init(userService: UserServiceProtocol) {
-        self.userService = userService
+
+    func loadMoreIfNeeded(index: Int) {
+        guard index == users.count - 1 else { return }
+        loadNextPage()
     }
-    
-    func viewDidLoad() {
-        loadUsers()
+
+    func didSelectUser(at index: Int) {
+        view?.navigateToProfile(with: users[index])
     }
-    
-    func loadUsers() {
-        
-        guard !isLoading, hasMorePages else { return }
-        isLoading = true
-        
+
+    func changeSorting(to sortType: StatisticsSortType) {
+        guard sortType != currentSortType else { return }
+
+        currentSortType = sortType
+        UserDefaults.standard.set(sortType.rawValue, forKey: sortTypeKey)
+
+        sortUsers()
+        view?.reloadData()
+    }
+
+    private func stateDidChanged() {
+        switch state {
+
+        case .initial:
+            assertionFailure("can't move to initial state")
+
+        case .loading:
+            view?.showLoading()
+            loadNextPage()
+
+        case .data:
+            view?.hideLoading()
+            view?.showTableView()
+            view?.reloadData()
+
+        case .empty:
+            view?.hideLoading()
+            view?.showEmptyView()
+
+        case .failed(let error):
+            view?.hideLoading()
+            view?.showError(makeErrorModel(error))
+        }
+    }
+
+    private func loadNextPage() {
+        guard !isLoadingPage, hasMorePages else { return }
+
+        isLoadingPage = true
+
         userService.fetchUsers(page: page, size: size) { [weak self] result in
-            guard let self = self else { return }
-            
-            self.isLoading = false
+            guard let self else { return }
+
+            self.isLoadingPage = false
 
             switch result {
-            case .success(let users):
+
+            case .success(let newUsers):
+
                 self.page += 1
-                self.hasMorePages = users.count == self.size
-                self.users.append(contentsOf: users)
-                self.view?.reloadData()
+                self.hasMorePages = newUsers.count == self.size
+
+                self.users.append(contentsOf: newUsers)
+                self.sortUsers()
+
+                self.state = self.users.isEmpty ? .empty : .data(self.users)
+
             case .failure(let error):
-                let errorMessage = ErrorModel(message: "Error occured: \(error)", actionText: "Повторить") {
-                    self.loadUsers()
+
+                if self.users.isEmpty {
+                    self.state = .failed(error)
+                } else {
+                    self.view?.hideLoading()
+                    self.view?.showError(self.makeErrorModel(error))
                 }
-                self.view?.showError(errorMessage)
             }
+        }
+    }
+
+    private func sortUsers() {
+        switch currentSortType {
+
+        case .name:
+            users.sort {
+                $0.name < $1.name
+            }
+
+        case .rating:
+            users.sort {
+                $0.rating > $1.rating
+            }
+        }
+    }
+
+    private func makeErrorModel(_ error: Error) -> ErrorModel {
+        let message: String
+
+        switch error {
+        case is NetworkClientError:
+            message = NSLocalizedString("Error.network", comment: "")
+        default:
+            message = NSLocalizedString("Error.unknown", comment: "")
+        }
+
+        let actionText = NSLocalizedString("Error.repeat", comment: "")
+
+        return ErrorModel(message: message, actionText: actionText) { [weak self] in
+            self?.state = .loading
         }
     }
 }

@@ -1,10 +1,8 @@
-//
-//  StatisticsAssembly.swift
-//  FakeNFT
-//
+// StatisticsAssembly.swift
+
 import UIKit
 
-class StatisticsAssembly {
+final class StatisticsAssembly {
     private let servicesAssembler: ServicesAssembly
     
     init(servicesAssembler: ServicesAssembly) {
@@ -14,7 +12,10 @@ class StatisticsAssembly {
     func build() -> UIViewController {
         let presenter = StatisticsPresenter(userService: servicesAssembler.userService)
         
-        let viewController = StatisticsViewController(presenter: presenter)
+        let viewController = StatisticsViewController(
+            presenter: presenter,
+            servicesAssembly: servicesAssembler
+        )
         
         presenter.view = viewController
         
