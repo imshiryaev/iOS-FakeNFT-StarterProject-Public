@@ -79,7 +79,13 @@ final class ProfilePresenterImpl: ProfilePresenter {
     }
 
     func didSelect(row: ProfileMenuRow) {
-        // Навигация в «Мои NFT» / «Избранные NFT» будет добавлена в Части 3.
+        guard let profile else { return }
+        switch row {
+        case .myNft:
+            view?.showMyNfts(nftIds: profile.nfts, likedIds: profile.likes)
+        case .favorites:
+            view?.showFavorites(profileId: profileId, profile: profile)
+        }
     }
 
     // MARK: - Private

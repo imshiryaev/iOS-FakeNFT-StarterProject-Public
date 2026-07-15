@@ -7,6 +7,8 @@ protocol ProfileView: AnyObject, ErrorView, LoadingView {
     func showTableView()
     func openWebsite(_ url: URL)
     func showEditProfile(profileId: String, profile: Profile)
+    func showMyNfts(nftIds: [String], likedIds: [String])
+    func showFavorites(profileId: String, profile: Profile)
 }
 
 final class ProfileViewController: UIViewController {
@@ -15,6 +17,8 @@ final class ProfileViewController: UIViewController {
     private let contentView = ProfileContentView()
 
     var makeEditScreen: ((String, Profile, @escaping (Profile) -> Void) -> UIViewController)?
+    var makeMyNftsScreen: (([String], [String]) -> UIViewController)?
+    var makeFavoritesScreen: ((String, Profile, @escaping (Profile) -> Void) -> UIViewController)?
 
     internal var activityIndicator: UIActivityIndicatorView {
         contentView.activityIndicator
@@ -92,6 +96,22 @@ extension ProfileViewController: ProfileView {
             self?.presenter.didUpdateProfile(updatedProfile)
         }
         present(editScreen, animated: true)
+    }
+
+    func showMyNfts(nftIds: [String], likedIds: [String]) {
+        guard let makeMyNftsScreen else { return }
+        let screen = makeMyNftsScreen(nftIds, likedIds)
+        screen.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(screen, animated: true)
+    }
+
+    func showFavorites(profileId: String, profile: Profile) {
+        guard let makeFavoritesScreen else { return }
+        let screen = makeFavoritesScreen(profileId, profile) { [weak self] updatedProfile in
+            self?.presenter.didUpdateProfile(updatedProfile)
+        }
+        screen.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(screen, animated: true)
     }
 }
 
