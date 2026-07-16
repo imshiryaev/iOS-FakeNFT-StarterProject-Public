@@ -1,8 +1,5 @@
 import UIKit
 
-protocol UserProfileViewControllerProtocol: AnyObject {
-    
-}
 
 final class UserProfileViewController: UIViewController, UserProfileViewControllerProtocol {
     private let presenter: UserProfilePresenterProtocol
