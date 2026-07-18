@@ -9,11 +9,11 @@ enum StatisticsState {
 }
 
 final class StatisticsPresenter: StatisticsPresenterProtocol {
-
     weak var view: StatisticsView?
 
     private let userService: UserServiceProtocol
-
+    
+    private var currentTask: NetworkTask?
     private var users: [User] = []
     private var page = 0
     private let size = 15
@@ -101,18 +101,14 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         guard !isLoadingPage, hasMorePages else { return }
 
         isLoadingPage = true
-
-        userService.fetchUsers(page: page, size: size) { [weak self] result in
+        currentTask = userService.fetchUsers(page: page, size: size) { [weak self] result in
             guard let self else { return }
-
             self.isLoadingPage = false
 
             switch result {
-
-            case .success(let newUsers):
-
+            case .success(let (newUsers, fetchedCount)):
                 self.page += 1
-                self.hasMorePages = newUsers.count == self.size
+                self.hasMorePages = fetchedCount == self.size
 
                 self.users.append(contentsOf: newUsers)
                 self.sortUsers()
@@ -120,7 +116,6 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
                 self.state = self.users.isEmpty ? .empty : .data(self.users)
 
             case .failure(let error):
-
                 if self.users.isEmpty {
                     self.state = .failed(error)
                 } else {
@@ -131,18 +126,17 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         }
     }
 
+    deinit {
+        currentTask?.cancel()
+    }
+
+    /* В ТЗ написано, что сортировка должна быть по рейтингу, который приходит с сервера равным 1 у всех пользователей. Но по ТЗ справа должно быть именно кол-во NFT, а не рейтинг. Пока оставлю сортировку по кол-ву NFT, как аналог рейтинга, если что напиши - исправлю */
     private func sortUsers() {
         switch currentSortType {
-
         case .name:
-            users.sort {
-                $0.name < $1.name
-            }
-
+            users.sort { $0.name < $1.name }
         case .rating:
-            users.sort {
-                $0.rating > $1.rating
-            }
+            users.sort { $0.nfts.count > $1.nfts.count }
         }
     }
 
