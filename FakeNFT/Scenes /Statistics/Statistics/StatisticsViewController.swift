@@ -26,7 +26,7 @@ final class StatisticsViewController: UIViewController, StatisticsView {
 
     private lazy var emptyLabel: UILabel = {
         let label = UILabel()
-        label.text = NSLocalizedString("NFT.epmty", comment: "")
+        label.text = NSLocalizedString("NFT.empty", comment: "")
         label.textAlignment = .center
         label.numberOfLines = 0
         label.isHidden = true
@@ -73,9 +73,11 @@ final class StatisticsViewController: UIViewController, StatisticsView {
     }
 
     func navigateToProfile(with user: User) {
-        let pr = UserProfilePresenter(input: UserProfileInput(user: user))
-        let vc = UserProfileViewController(presenter: pr)
-        navigationController?.pushViewController(vc, animated: true)
+        let viewController = UserProfileAssembly(
+            servicesAssembler: servicesAssembly
+        ).build(with: UserProfileInput(user: user))
+
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     private func setupUI() {
