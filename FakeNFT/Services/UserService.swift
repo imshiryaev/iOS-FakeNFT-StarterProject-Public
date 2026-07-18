@@ -4,23 +4,42 @@
 //
 import Foundation
 
+// UserService.swift
 protocol UserServiceProtocol {
-    func fetchUsers(page: Int, size: Int, completion: @escaping (Result<[User], Error>) -> Void)
+    @discardableResult
+    func fetchUsers(
+        page: Int,
+        size: Int,
+        completion: @escaping (Result<(users: [User], fetchedCount: Int), Error>) -> Void
+    ) -> NetworkTask?
 }
 
 final class UserService: UserServiceProtocol {
-    
-    var networkClient: NetworkClient
-    
+    private let networkClient: NetworkClient
+
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
-    
-    func fetchUsers(page: Int, size: Int, completion: @escaping (Result<[User], any Error>) -> Void) {
+
+    @discardableResult
+    func fetchUsers(
+        page: Int,
+        size: Int,
+        completion: @escaping (Result<(users: [User], fetchedCount: Int), Error>) -> Void
+    ) -> NetworkTask? {
         let userRequest = UserRequest(page: page, size: size)
-        
-        networkClient.send(request: userRequest, type: [User].self, onResponse: completion)
+
+        return networkClient.send(
+            request: userRequest,
+            type: [UserDTO].self
+        ) { result in
+            switch result {
+            case .success(let userDTOs):
+                let users = userDTOs.compactMap { $0.toDomain() }
+                completion(.success((users: users, fetchedCount: userDTOs.count)))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
-    
-    
 }

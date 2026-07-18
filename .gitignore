@@ -4,6 +4,7 @@
 
 ## API and different variables storage
 *.xcconfig
+!*.xcconfig.example
 
 ## User settings
 xcuserdata/

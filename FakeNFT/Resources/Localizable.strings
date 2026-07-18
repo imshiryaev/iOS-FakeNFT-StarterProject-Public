@@ -4,3 +4,8 @@
 "Error.unknown" = "Произошла неизвестная ошибка";
 "Error.repeat" = "Повторить";
 "Error.title" = "Ошибка";
+"Close" = "Закрыть";
+"NFT.empty" = "У пользователя нет NFT";
+"Sort" = "Сортировка";
+"Sort.byName" = "По имени";
+"Sort.byRating" = "По рейтингу";

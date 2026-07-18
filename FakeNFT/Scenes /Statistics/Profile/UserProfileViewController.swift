@@ -1,21 +1,13 @@
 import UIKit
 
-final class UserProfilePresenter {
-    weak var view: UserProfileViewController?
-    private let input: UserProfileInput
 
-    init(input: UserProfileInput) {
-        self.input = input
-    }
-}
+final class UserProfileViewController: UIViewController, UserProfileViewControllerProtocol {
+    private let presenter: UserProfilePresenterProtocol
 
-// UserProfileViewController.swift — временный минимум
-final class UserProfileViewController: UIViewController {
-    private let presenter: UserProfilePresenter
-
-    init(presenter: UserProfilePresenter) {
+    init(presenter: UserProfilePresenterProtocol) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        view.backgroundColor = .white
     }
 
     @available(*, unavailable)
