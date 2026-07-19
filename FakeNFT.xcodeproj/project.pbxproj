@@ -55,7 +55,7 @@
 		A598EB493009688000B2E441 /* UserProfileViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB483009687900B2E441 /* UserProfileViewControllerProtocol.swift */; };
 		A598EB4C300968A900B2E441 /* StatisticsVCProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB4B300968A000B2E441 /* StatisticsVCProtocol.swift */; };
 		A598EB4F300968D500B2E441 /* StatisticsPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB4E300968D000B2E441 /* StatisticsPresenterProtocol.swift */; };
-		A598EB51300C3C9500B2E441 /* ServerVariables.xcconfig.example in Resources */ = {isa = PBXBuildFile; fileRef = A598EB50300C3C8700B2E441 /* ServerVariables.xcconfig.example */; };
+		A598EB51300C3C9500B2E441 /* ServerVariablesPublic.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A598EB50300C3C8700B2E441 /* ServerVariablesPublic.xcconfig */; };
 		A598EB53300CABCE00B2E441 /* UserWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB52300CABC000B2E441 /* UserWebViewController.swift */; };
 		A598EB55300CAC3400B2E441 /* NftCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB54300CAC3000B2E441 /* NftCollectionCell.swift */; };
 		A598EB59300CDFD100B2E441 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB58300CDFCD00B2E441 /* AppConstants.swift */; };
@@ -143,7 +143,7 @@
 		A598EB483009687900B2E441 /* UserProfileViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewControllerProtocol.swift; sourceTree = "<group>"; };
 		A598EB4B300968A000B2E441 /* StatisticsVCProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsVCProtocol.swift; sourceTree = "<group>"; };
 		A598EB4E300968D000B2E441 /* StatisticsPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenterProtocol.swift; sourceTree = "<group>"; };
-		A598EB50300C3C8700B2E441 /* ServerVariables.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = ServerVariables.xcconfig.example; sourceTree = "<group>"; };
+		A598EB50300C3C8700B2E441 /* ServerVariablesPublic.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ServerVariablesPublic.xcconfig; sourceTree = "<group>"; };
 		A598EB52300CABC000B2E441 /* UserWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWebViewController.swift; sourceTree = "<group>"; };
 		A598EB54300CAC3000B2E441 /* NftCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCollectionCell.swift; sourceTree = "<group>"; };
 		A598EB58300CDFCD00B2E441 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
@@ -439,7 +439,7 @@
 		A5E88B712FF1BFEF00BD66CE /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				A598EB50300C3C8700B2E441 /* ServerVariables.xcconfig.example */,
+				A598EB50300C3C8700B2E441 /* ServerVariablesPublic.xcconfig */,
 				A5E88B722FF1C03300BD66CE /* ServerVariables.xcconfig */,
 			);
 			path = Settings;
@@ -622,7 +622,7 @@
 				A5E88B732FF1C03300BD66CE /* ServerVariables.xcconfig in Resources */,
 				3F6806A329CBBAF200B4F915 /* LaunchScreen.storyboard in Resources */,
 				E1CD40DC2A96BECC00BE7FE8 /* Localizable.strings in Resources */,
-				A598EB51300C3C9500B2E441 /* ServerVariables.xcconfig.example in Resources */,
+				A598EB51300C3C9500B2E441 /* ServerVariablesPublic.xcconfig in Resources */,
 				3F6806A029CBBAF200B4F915 /* Assets.xcassets in Resources */,
 				A5E88B812FF3682B00BD66CE /* ModuleDecomposition.md in Resources */,
 				3F68069E29CBBAF100B4F915 /* Main.storyboard in Resources */,
