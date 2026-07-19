@@ -7,7 +7,7 @@ protocol StatisticsPresenterProtocol: AnyObject {
 
     func viewDidLoad()
     func loadMoreIfNeeded(index: Int)
-    func user(at index: Int) -> User
+    func cellViewModel(at index: Int) -> StatisticsCellViewModel
     func didSelectUser(at index: Int)
     func changeSorting(to sortType: StatisticsSortType)
 }
