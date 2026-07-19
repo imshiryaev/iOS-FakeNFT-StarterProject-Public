@@ -10,8 +10,8 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 12
-        imageView.backgroundColor = UIColor(hexString: "#F7F7F8")
+        imageView.layer.cornerRadius = LayoutConstants.NftCollection.imageCornerRadius
+        imageView.backgroundColor = .ypLightGray
         return imageView
     }()
 
@@ -31,7 +31,7 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
     private let ratingStack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
-        stack.spacing = 2
+        stack.spacing = LayoutConstants.NftCollection.ratingSpacing
         return stack
     }()
 
@@ -80,12 +80,16 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+
         nftImageView.kf.cancelDownloadTask()
         nftImageView.image = nil
+
         likeIndicator.stopAnimating()
         cartIndicator.stopAnimating()
+
         likeButton.isHidden = false
         cartButton.isHidden = false
+
         onLikeTapped = nil
         onCartTapped = nil
     }
@@ -120,20 +124,27 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
 
     private func updateRating(_ rating: Int) {
         for (index, starView) in starViews.enumerated() {
-            starView.tintColor = index < rating ? .systemYellow : UIColor(hexString: "#E6E6E8")
+            starView.tintColor = index < rating
+                ? .systemYellow
+                : UIColor(hexString: "#E6E6E8")
         }
     }
 
     private func updateLikeIcon() {
         likeButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         likeButton.tintColor = isLiked ? .systemRed : .white
+
         likeIndicator.stopAnimating()
         likeButton.isHidden = false
     }
 
     private func updateCartIcon() {
-        let image = isInCart ? UIImage(resource: .cartAdded) : UIImage(resource: .cart)
+        let image = isInCart
+            ? UIImage(resource: .cartAdded)
+            : UIImage(resource: .cart)
+
         cartButton.setImage(image, for: .normal)
+
         cartIndicator.stopAnimating()
         cartButton.isHidden = false
     }
@@ -142,6 +153,7 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
         for _ in 0..<5 {
             let starView = UIImageView(image: UIImage(systemName: "star.fill"))
             starView.contentMode = .scaleAspectFit
+
             starViews.append(starView)
             ratingStack.addArrangedSubview(starView)
         }
@@ -165,29 +177,58 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
             nftImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             nftImageView.heightAnchor.constraint(equalTo: nftImageView.widthAnchor),
 
-            likeButton.topAnchor.constraint(equalTo: nftImageView.topAnchor, constant: 8),
-            likeButton.trailingAnchor.constraint(equalTo: nftImageView.trailingAnchor, constant: -8),
-            likeButton.widthAnchor.constraint(equalToConstant: 24),
-            likeButton.heightAnchor.constraint(equalToConstant: 24),
+            likeButton.topAnchor.constraint(
+                equalTo: nftImageView.topAnchor,
+                constant: LayoutConstants.interItemSpacing8
+            ),
+            likeButton.trailingAnchor.constraint(
+                equalTo: nftImageView.trailingAnchor,
+                constant: -LayoutConstants.interItemSpacing8
+            ),
+            likeButton.widthAnchor.constraint(
+                equalToConstant: LayoutConstants.NftCollection.likeButtonSize
+            ),
+            likeButton.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.NftCollection.likeButtonSize
+            ),
 
             likeIndicator.centerXAnchor.constraint(equalTo: likeButton.centerXAnchor),
             likeIndicator.centerYAnchor.constraint(equalTo: likeButton.centerYAnchor),
 
-            ratingStack.topAnchor.constraint(equalTo: nftImageView.bottomAnchor, constant: 8),
+            ratingStack.topAnchor.constraint(
+                equalTo: nftImageView.bottomAnchor,
+                constant: LayoutConstants.interItemSpacing8
+            ),
             ratingStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
 
-            nameLabel.topAnchor.constraint(equalTo: ratingStack.bottomAnchor, constant: 4),
+            nameLabel.topAnchor.constraint(
+                equalTo: ratingStack.bottomAnchor,
+                constant: LayoutConstants.NftCollection.labelSpacing
+            ),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: -4),
+            nameLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: cartButton.leadingAnchor,
+                constant: -LayoutConstants.NftCollection.labelSpacing
+            ),
 
-            priceLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            priceLabel.topAnchor.constraint(
+                equalTo: nameLabel.bottomAnchor,
+                constant: LayoutConstants.NftCollection.labelSpacing
+            ),
             priceLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            priceLabel.trailingAnchor.constraint(lessThanOrEqualTo: cartButton.leadingAnchor, constant: -4),
+            priceLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: cartButton.leadingAnchor,
+                constant: -LayoutConstants.NftCollection.labelSpacing
+            ),
 
             cartButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cartButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            cartButton.widthAnchor.constraint(equalToConstant: 40),
-            cartButton.heightAnchor.constraint(equalToConstant: 40),
+            cartButton.widthAnchor.constraint(
+                equalToConstant: LayoutConstants.NftCollection.cartButtonSize
+            ),
+            cartButton.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.NftCollection.cartButtonSize
+            ),
 
             cartIndicator.centerXAnchor.constraint(equalTo: cartButton.centerXAnchor),
             cartIndicator.centerYAnchor.constraint(equalTo: cartButton.centerYAnchor)
@@ -195,9 +236,14 @@ final class NftCollectionCell: UICollectionViewCell, ReuseIdentifying {
 
         for starView in starViews {
             starView.translatesAutoresizingMaskIntoConstraints = false
+
             NSLayoutConstraint.activate([
-                starView.widthAnchor.constraint(equalToConstant: 13),
-                starView.heightAnchor.constraint(equalToConstant: 13)
+                starView.widthAnchor.constraint(
+                    equalToConstant: LayoutConstants.NftCollection.starSize
+                ),
+                starView.heightAnchor.constraint(
+                    equalToConstant: LayoutConstants.NftCollection.starSize
+                )
             ])
         }
     }

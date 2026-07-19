@@ -10,7 +10,7 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
 
     private let indexLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .caption1
         label.textAlignment = .center
         return label
     }()
@@ -49,6 +49,7 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
 
     func configure(index: Int, user: User) {
         indexLabel.text = "\(index)"
+
         userInfoView.configure(
             name: user.name,
             avatarURL: user.avatar,
@@ -76,7 +77,10 @@ final class StatisticsCell: UITableViewCell, ReuseIdentifying {
             indexLabel.trailingAnchor.constraint(equalTo: indexContainer.trailingAnchor),
             indexLabel.centerYAnchor.constraint(equalTo: indexContainer.centerYAnchor),
 
-            userInfoView.leadingAnchor.constraint(equalTo: indexContainer.trailingAnchor, constant: 8),
+            userInfoView.leadingAnchor.constraint(
+                equalTo: indexContainer.trailingAnchor,
+                constant: LayoutConstants.interItemSpacing8
+            ),
             userInfoView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             userInfoView.topAnchor.constraint(equalTo: contentView.topAnchor),
             userInfoView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -91,20 +95,20 @@ final class UserInfoView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 14
-        imageView.backgroundColor = UIColor(hexString: "#F7F7F8")
+        imageView.backgroundColor = .ypLightGray
         return imageView
     }()
 
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         return label
     }()
 
     private let ratingLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.font = .headline3
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         return label
     }()
@@ -128,36 +132,52 @@ final class UserInfoView: UIView {
         ratingLabel.text = "\(rating)"
 
         profileImageView.tintColor = .systemGray
-        // ссылки битые приходят, по ним не открывается аватар
+
         profileImageView.kf.setImage(
             with: avatarURL,
             placeholder: UIImage(systemName: "person.circle.fill")
         )
     }
-    
+
     func prepareForReuse() {
         profileImageView.kf.cancelDownloadTask()
         profileImageView.image = nil
     }
- 
+
     private func setupUI() {
-        backgroundColor = UIColor(hexString: "#F7F7F8")
-        layer.cornerRadius = 12
+        backgroundColor = .ypLightGray
+        layer.cornerRadius = LayoutConstants.Statistics.cellCornerRadius
         clipsToBounds = true
     }
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            profileImageView.leadingAnchor.constraint(
+                equalTo: leadingAnchor,
+                constant: LayoutConstants.horizontalSpacing
+            ),
             profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            profileImageView.widthAnchor.constraint(equalToConstant: 30),
-            profileImageView.heightAnchor.constraint(equalToConstant: 30),
+            profileImageView.widthAnchor.constraint(
+                equalToConstant: LayoutConstants.Statistics.cellAvatarSize
+            ),
+            profileImageView.heightAnchor.constraint(
+                equalToConstant: LayoutConstants.Statistics.cellAvatarSize
+            ),
 
-            nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 8),
+            nameLabel.leadingAnchor.constraint(
+                equalTo: profileImageView.trailingAnchor,
+                constant: LayoutConstants.interItemSpacing8
+            ),
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            nameLabel.trailingAnchor.constraint(lessThanOrEqualTo: ratingLabel.leadingAnchor, constant: -8),
+            nameLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: ratingLabel.leadingAnchor,
+                constant: -LayoutConstants.interItemSpacing8
+            ),
 
-            ratingLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            ratingLabel.trailingAnchor.constraint(
+                equalTo: trailingAnchor,
+                constant: -LayoutConstants.horizontalSpacing
+            ),
             ratingLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }

@@ -12,7 +12,7 @@ final class UserProfileViewController: UIViewController, UserProfileViewControll
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 35
         imageView.tintColor = .systemGray
-        imageView.backgroundColor = UIColor(hexString: "#F7F7F8")
+        imageView.backgroundColor = .ypLightGray
         return imageView
     }()
 
@@ -128,26 +128,26 @@ final class UserProfileViewController: UIViewController, UserProfileViewControll
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            avatarImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
             avatarImageView.widthAnchor.constraint(equalToConstant: 70),
             avatarImageView.heightAnchor.constraint(equalToConstant: 70),
 
             nameLabel.centerYAnchor.constraint(equalTo: avatarImageView.centerYAnchor),
-            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: 16),
-            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            nameLabel.leadingAnchor.constraint(equalTo: avatarImageView.trailingAnchor, constant: LayoutConstants.horizontalSpacing),
+            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
 
             descriptionLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 20),
-            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            descriptionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
 
             websiteButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 28),
-            websiteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            websiteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            websiteButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            websiteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
             websiteButton.heightAnchor.constraint(equalToConstant: 40),
 
             collectionControl.topAnchor.constraint(equalTo: websiteButton.bottomAnchor, constant: 57),
-            collectionControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            collectionControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
             collectionControl.heightAnchor.constraint(equalToConstant: 44),
 
             collectionTitleLabel.leadingAnchor.constraint(equalTo: collectionControl.leadingAnchor),

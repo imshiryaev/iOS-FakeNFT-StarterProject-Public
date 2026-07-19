@@ -1,10 +1,5 @@
 import UIKit
 
-private enum Constants {
-    static let cellAspectRatio: CGFloat = 4.25
-    static let horizontalSpacing: CGFloat = 16.0
-}
-
 final class StatisticsViewController: UIViewController, StatisticsView {
 
     var presenter: StatisticsPresenterProtocol
@@ -113,8 +108,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
         NSLayoutConstraint.activate([
 
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalSpacing),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalSpacing),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -122,8 +117,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
 
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: Constants.horizontalSpacing),
-            emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -Constants.horizontalSpacing)
+            emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing)
         ])
     }
 
@@ -195,7 +190,7 @@ extension StatisticsViewController: UITableViewDelegate {
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
 
-        tableView.bounds.width / Constants.cellAspectRatio
+        tableView.bounds.width / LayoutConstants.Statistics.cellAspectRatio
     }
 
     func tableView(

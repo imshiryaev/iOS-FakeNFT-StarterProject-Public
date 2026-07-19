@@ -58,6 +58,7 @@
 		A598EB51300C3C9500B2E441 /* ServerVariables.xcconfig.example in Resources */ = {isa = PBXBuildFile; fileRef = A598EB50300C3C8700B2E441 /* ServerVariables.xcconfig.example */; };
 		A598EB53300CABCE00B2E441 /* UserWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB52300CABC000B2E441 /* UserWebViewController.swift */; };
 		A598EB55300CAC3400B2E441 /* NftCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB54300CAC3000B2E441 /* NftCollectionCell.swift */; };
+		A598EB59300CDFD100B2E441 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A598EB58300CDFCD00B2E441 /* AppConstants.swift */; };
 		A5E88B732FF1C03300BD66CE /* ServerVariables.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A5E88B722FF1C03300BD66CE /* ServerVariables.xcconfig */; };
 		A5E88B812FF3682B00BD66CE /* ModuleDecomposition.md in Resources */ = {isa = PBXBuildFile; fileRef = A5E88B802FF3681800BD66CE /* ModuleDecomposition.md */; };
 		A5E88B852FF587AF00BD66CE /* StatisticsPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E88B842FF587AB00BD66CE /* StatisticsPresenter.swift */; };
@@ -145,6 +146,7 @@
 		A598EB50300C3C8700B2E441 /* ServerVariables.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = ServerVariables.xcconfig.example; sourceTree = "<group>"; };
 		A598EB52300CABC000B2E441 /* UserWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserWebViewController.swift; sourceTree = "<group>"; };
 		A598EB54300CAC3000B2E441 /* NftCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCollectionCell.swift; sourceTree = "<group>"; };
+		A598EB58300CDFCD00B2E441 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		A5E88B722FF1C03300BD66CE /* ServerVariables.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = ServerVariables.xcconfig; sourceTree = "<group>"; };
 		A5E88B802FF3681800BD66CE /* ModuleDecomposition.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = ModuleDecomposition.md; sourceTree = "<group>"; };
 		A5E88B842FF587AB00BD66CE /* StatisticsPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsPresenter.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 		0CF2C2D92A783C1600FDC837 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				A598EB58300CDFCD00B2E441 /* AppConstants.swift */,
 				A598EB52300CABC000B2E441 /* UserWebViewController.swift */,
 				0CF2C2DF2A784C5600FDC837 /* Views */,
 				0CF2C2DE2A784C4C00FDC837 /* Protocols */,
@@ -661,6 +664,7 @@
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
+				A598EB59300CDFD100B2E441 /* AppConstants.swift in Sources */,
 				A598EB473009685500B2E441 /* UserProfilePresenterProtocol.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
