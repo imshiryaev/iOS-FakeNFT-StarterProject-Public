@@ -3,7 +3,8 @@ import Foundation
 enum StatisticsState {
     case initial
     case loading
-    case data([User])
+    case paginating
+    case data
     case empty
     case failed(Error)
 }
@@ -12,7 +13,9 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     weak var view: StatisticsView?
 
     private let userService: UserServiceProtocol
-    
+    private let router: StatisticsRouterProtocol
+    private let settingsStorage: SettingsStorage
+
     private var currentTask: NetworkTask?
     private var users: [User] = []
     private var page = 0
@@ -34,10 +37,16 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         users.count
     }
 
-    init(userService: UserServiceProtocol) {
+    init(
+        userService: UserServiceProtocol,
+        router: StatisticsRouterProtocol,
+        settingsStorage: SettingsStorage
+    ) {
         self.userService = userService
+        self.router = router
+        self.settingsStorage = settingsStorage
 
-        if let savedValue = UserDefaults.standard.string(forKey: sortTypeKey),
+        if let savedValue = settingsStorage.string(forKey: sortTypeKey),
            let savedSortType = StatisticsSortType(rawValue: savedValue) {
             currentSortType = savedSortType
         } else {
@@ -49,8 +58,14 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         state = .loading
     }
 
-    func user(at index: Int) -> User {
-        users[index]
+    func cellViewModel(at index: Int) -> StatisticsCellViewModel {
+        let user = users[index]
+        return StatisticsCellViewModel(
+            position: index + 1,
+            name: user.name,
+            rating: user.nfts.count,
+            avatarURL: user.avatar
+        )
     }
 
     func loadMoreIfNeeded(index: Int) {
@@ -59,14 +74,14 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
     }
 
     func didSelectUser(at index: Int) {
-        view?.navigateToProfile(with: users[index])
+        router.navigateToProfile(with: users[index])
     }
 
     func changeSorting(to sortType: StatisticsSortType) {
         guard sortType != currentSortType else { return }
 
         currentSortType = sortType
-        UserDefaults.standard.set(sortType.rawValue, forKey: sortTypeKey)
+        settingsStorage.set(sortType.rawValue, forKey: sortTypeKey)
 
         sortUsers()
         view?.reloadData()
@@ -82,17 +97,23 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
             view?.showLoading()
             loadNextPage()
 
+        case .paginating:
+            view?.showPaginationLoading()
+
         case .data:
             view?.hideLoading()
+            view?.hidePaginationLoading()
             view?.showTableView()
             view?.reloadData()
 
         case .empty:
             view?.hideLoading()
+            view?.hidePaginationLoading()
             view?.showEmptyView()
 
         case .failed(let error):
             view?.hideLoading()
+            view?.hidePaginationLoading()
             view?.showError(makeErrorModel(error))
         }
     }
@@ -101,6 +122,11 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
         guard !isLoadingPage, hasMorePages else { return }
 
         isLoadingPage = true
+
+        if !users.isEmpty {
+            state = .paginating
+        }
+
         currentTask = userService.fetchUsers(page: page, size: size) { [weak self] result in
             guard let self else { return }
             self.isLoadingPage = false
@@ -113,12 +139,13 @@ final class StatisticsPresenter: StatisticsPresenterProtocol {
                 self.users.append(contentsOf: newUsers)
                 self.sortUsers()
 
-                self.state = self.users.isEmpty ? .empty : .data(self.users)
+                self.state = self.users.isEmpty ? .empty : .data
 
             case .failure(let error):
                 if self.users.isEmpty {
                     self.state = .failed(error)
                 } else {
+                    self.view?.hidePaginationLoading()
                     self.view?.hideLoading()
                     self.view?.showError(self.makeErrorModel(error))
                 }

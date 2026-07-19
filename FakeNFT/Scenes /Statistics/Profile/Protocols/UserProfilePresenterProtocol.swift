@@ -1,5 +1,8 @@
 import Foundation
 
-protocol UserProfilePresenterProtocol {
-    
+protocol UserProfilePresenterProtocol: AnyObject {
+    var view: UserProfileViewControllerProtocol? { get set }
+    func viewDidLoad()
+    func didTapWebsite()
+    func didTapCollection()
 }

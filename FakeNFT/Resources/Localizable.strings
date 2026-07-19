@@ -9,3 +9,6 @@
 "Sort" = "Сортировка";
 "Sort.byName" = "По имени";
 "Sort.byRating" = "По рейтингу";
+"Profile.collection" = "Коллекция NFT (%d)";
+"Profile.myNfts" = "Коллекция NFT";
+"Profile.website" = "Перейти на сайт пользователя";

@@ -1,19 +1,19 @@
 import UIKit
 
-private enum Constants {
-    static let cellAspectRatio: CGFloat = 4.25
-    static let horizontalSpacing: CGFloat = 16.0
-}
-
 final class StatisticsViewController: UIViewController, StatisticsView {
 
-    var presenter: StatisticsPresenterProtocol
-
-    private let servicesAssembly: ServicesAssembly
+    private let presenter: StatisticsPresenterProtocol
 
     let activityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
+        return indicator
+    }()
+
+    private let paginationIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        indicator.frame = CGRect(x: 0, y: 0, width: 0, height: 44)
         return indicator
     }()
 
@@ -33,12 +33,15 @@ final class StatisticsViewController: UIViewController, StatisticsView {
         return label
     }()
 
-    init(
-        presenter: StatisticsPresenterProtocol,
-        servicesAssembly: ServicesAssembly
-    ) {
+    private lazy var sortBarButtonItem = UIBarButtonItem(
+        image: UIImage(resource: .linesHorizontal),
+        style: .plain,
+        target: self,
+        action: #selector(sortButtonTapped)
+    )
+
+    init(presenter: StatisticsPresenterProtocol) {
         self.presenter = presenter
-        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -50,10 +53,10 @@ final class StatisticsViewController: UIViewController, StatisticsView {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        presenter.view = self
-
         setupUI()
         setupConstraints()
+
+        navigationItem.backButtonDisplayMode = .minimal
 
         presenter.viewDidLoad()
     }
@@ -72,25 +75,21 @@ final class StatisticsViewController: UIViewController, StatisticsView {
         tableView.reloadData()
     }
 
-    func navigateToProfile(with user: User) {
-        let viewController = UserProfileAssembly(
-            servicesAssembler: servicesAssembly
-        ).build(with: UserProfileInput(user: user))
+    func showPaginationLoading() {
+        paginationIndicator.startAnimating()
+        tableView.tableFooterView = paginationIndicator
+    }
 
-        navigationController?.pushViewController(viewController, animated: true)
+    func hidePaginationLoading() {
+        paginationIndicator.stopAnimating()
+        tableView.tableFooterView = nil
     }
 
     private func setupUI() {
 
         view.backgroundColor = .systemBackground
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(resource: .linesHorizontal),
-            style: .plain,
-            target: self,
-            action: #selector(sortButtonTapped)
-        )
-
+        navigationItem.rightBarButtonItem = sortBarButtonItem
         navigationItem.rightBarButtonItem?.tintColor = .systemGray
 
         view.addSubviews(
@@ -111,8 +110,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
         NSLayoutConstraint.activate([
 
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constants.horizontalSpacing),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constants.horizontalSpacing),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -120,8 +119,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
 
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: Constants.horizontalSpacing),
-            emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -Constants.horizontalSpacing)
+            emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
+            emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing)
         ])
     }
 
@@ -154,6 +153,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
             )
         )
 
+        alert.popoverPresentationController?.barButtonItem = sortBarButtonItem
+
         present(alert, animated: true)
     }
 }
@@ -175,12 +176,7 @@ extension StatisticsViewController: UITableViewDataSource {
 
         let cell: StatisticsCell = tableView.dequeueReusableCell()
 
-        let user = presenter.user(at: indexPath.row)
-
-        cell.configure(
-            index: indexPath.row + 1,
-            user: user
-        )
+        cell.configure(with: presenter.cellViewModel(at: indexPath.row))
 
         return cell
     }
@@ -193,7 +189,7 @@ extension StatisticsViewController: UITableViewDelegate {
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
 
-        tableView.bounds.width / Constants.cellAspectRatio
+        tableView.bounds.width / LayoutConstants.Statistics.cellAspectRatio
     }
 
     func tableView(
