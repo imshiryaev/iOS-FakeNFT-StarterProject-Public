@@ -68,20 +68,18 @@ final class NftCollectionViewController: UIViewController, NftCollectionViewCont
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         view.backgroundColor = .systemBackground
         title = NSLocalizedString("Profile.myNfts", comment: "")
 
         navigationController?.navigationBar.tintColor = .ypBlack
         navigationItem.backButtonDisplayMode = .minimal
 
-        view.addSubview(collectionView)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(activityIndicator)
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(emptyLabel)
-        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubviews(
+            collectionView,
+            activityIndicator,
+            emptyLabel
+        )
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -94,8 +92,14 @@ final class NftCollectionViewController: UIViewController, NftCollectionViewCont
 
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyLabel.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: LayoutConstants.horizontalSpacing),
-            emptyLabel.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -LayoutConstants.horizontalSpacing)
+            emptyLabel.leadingAnchor.constraint(
+                greaterThanOrEqualTo: view.leadingAnchor,
+                constant: LayoutConstants.horizontalSpacing
+            ),
+            emptyLabel.trailingAnchor.constraint(
+                lessThanOrEqualTo: view.trailingAnchor,
+                constant: -LayoutConstants.horizontalSpacing
+            )
         ])
 
         presenter.viewDidLoad()
