@@ -54,6 +54,8 @@ final class StatisticsViewController: UIViewController, StatisticsView {
 
         setupUI()
         setupConstraints()
+        
+        navigationItem.backButtonDisplayMode = .minimal
 
         presenter.viewDidLoad()
     }
