@@ -7,10 +7,12 @@ final class UserProfileAssembly {
         self.servicesAssembler = servicesAssembler
     }
 
-    // input подключим позже
     func build(with input: UserProfileInput) -> UIViewController {
         let presenter = UserProfilePresenter(input: input)
-        let viewController = UserProfileViewController(presenter: presenter)
+        let viewController = UserProfileViewController(
+            presenter: presenter,
+            servicesAssembly: servicesAssembler
+        )
         presenter.view = viewController
         return viewController
     }
