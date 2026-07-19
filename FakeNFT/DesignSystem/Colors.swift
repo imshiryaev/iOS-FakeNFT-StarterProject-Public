@@ -36,6 +36,9 @@ extension UIColor {
     // Background Colors
     static let background = UIColor.white
 
+    // Отдельно на случай изменения цвета всего навбара
+    static let ypBlack = UIColor(hexString: "1A1B22")
+    
     // Text Colors
     static let textPrimary = UIColor.black
     static let textSecondary = UIColor.gray
