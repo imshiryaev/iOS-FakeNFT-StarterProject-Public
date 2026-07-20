@@ -1,5 +1,6 @@
 import Foundation
 
+#warning("Insert your API token into Secrets.xcconfig before building")
 enum RequestConstants {
     static let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
 
