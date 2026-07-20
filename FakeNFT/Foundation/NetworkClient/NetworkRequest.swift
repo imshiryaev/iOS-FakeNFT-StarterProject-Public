@@ -11,6 +11,8 @@ protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Dto? { get }
+    // Позволяет отправлять повторяющиеся ключи (например, likes=1&likes=2), чего не умеет Dto.
+    var bodyQueryItems: [URLQueryItem]? { get }
 }
 
 protocol Dto {
@@ -21,4 +23,5 @@ protocol Dto {
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
+    var bodyQueryItems: [URLQueryItem]? { nil }
 }

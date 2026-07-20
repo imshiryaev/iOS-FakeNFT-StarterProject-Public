@@ -4,20 +4,32 @@ final class TabBarController: UITabBarController {
 
     var servicesAssembly: ServicesAssembly!
 
+    private let profileTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.profile", comment: ""),
+        image: UIImage(systemName: "person.crop.circle.fill"),
+        tag: 0
+    )
+
     private let catalogTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.catalog", comment: ""),
         image: UIImage(systemName: "square.stack.3d.up.fill"),
-        tag: 0
+        tag: 1
     )
 
     private let statisticsTabBarItem = UITabBarItem(
         title: NSLocalizedString("Tab.statistics", comment: ""),
         image: UIImage(systemName: "chart.bar.fill"),
-        tag: 1
+        tag: 2
     )
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let profileController = ProfileAssembly(
+            servicesAssembler: servicesAssembly
+        ).build(with: "1")
+        let profileNavigationController = UINavigationController(rootViewController: profileController)
+        profileNavigationController.tabBarItem = profileTabBarItem
 
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
@@ -32,6 +44,7 @@ final class TabBarController: UITabBarController {
         statisticsNavigationController.tabBarItem = statisticsTabBarItem
 
         viewControllers = [
+            profileNavigationController,
             catalogNavigationController,
             statisticsNavigationController
         ]
