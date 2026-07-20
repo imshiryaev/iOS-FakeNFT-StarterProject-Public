@@ -1,21 +1,20 @@
 import Foundation
 
+#warning("Insert your API token into Secrets.xcconfig before building")
 enum RequestConstants {
-    static let baseURL = "https://d5dn3j2ouj72b0ejucbl.apigw.yandexcloud.net"
-    #warning("Instert your token here")
+    static let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
+
     static var token: String {
         guard let token = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String, !token.isEmpty
         else {
             fatalError(
                 """
-                ⚠️ ОШИБКА: API_KEY не найден!
+                ⚠️ ОШИБКА: TOKEN не найден!
 
                 ЧТО ДЕЛАТЬ:
-                1. Откройте терминал в корне проекта
-                2. Выполните: cp Secrets.xcconfig.template Secrets.xcconfig
-                3. Откройте Secrets.xcconfig и замените "token" на реальный ключ
-
-                ГОТОВО! Пересоберите проект.
+                1. Создайте файл ServerVariables.xcconfig на основе ServerVariablesPublic.xcconfig
+                2. Добавьте свой токен в конфигурационный файл
+                3. Пересоберите проект
                 """
             )
         }

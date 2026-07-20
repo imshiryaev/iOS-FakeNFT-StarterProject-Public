@@ -1,9 +1,11 @@
 import Foundation
 
 typealias NftCompletion = (Result<Nft, Error>) -> Void
+typealias NftsCompletion = (Result<[Nft], Error>) -> Void
 
 protocol NftService {
     func loadNft(id: String, completion: @escaping NftCompletion)
+    func loadNfts(ids: [String], completion: @escaping NftsCompletion)
 }
 
 final class NftServiceImpl: NftService {
@@ -31,6 +33,45 @@ final class NftServiceImpl: NftService {
             case .failure(let error):
                 completion(.failure(error))
             }
+        }
+    }
+    
+    func loadNfts(ids: [String], completion: @escaping NftsCompletion) {
+        guard !ids.isEmpty else {
+            completion(.success([]))
+            return
+        }
+
+        let group = DispatchGroup()
+        let queue = DispatchQueue(label: "loadNfts.sync")
+
+        var results = [Int: Result<Nft, Error>]()
+
+        for (index, id) in ids.enumerated() {
+            group.enter()
+            loadNft(id: id) { result in
+                queue.async {
+                    results[index] = result
+                    group.leave()
+                }
+            }
+        }
+
+        group.notify(queue: .main) {
+            var nfts: [Nft] = []
+            for index in ids.indices {
+                switch results[index] {
+                case .success(let nft):
+                    nfts.append(nft)
+                case .failure(let error):
+                    completion(.failure(error))
+                    return
+                case .none:
+                    completion(.failure(NetworkClientError.urlSessionError))
+                    return
+                }
+            }
+            completion(.success(nfts))
         }
     }
 }

@@ -2,11 +2,13 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+## API and different variables storage.
+## Secrets is stub file 
+*.xcconfig
+!Secrets.xcconfig 
+
 ## User settings
 xcuserdata/
-
-Secrets.xcconfig
-*.xcconfig
 
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint

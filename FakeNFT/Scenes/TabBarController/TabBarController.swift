@@ -16,6 +16,12 @@ final class TabBarController: UITabBarController {
         tag: 1
     )
 
+    private let statisticsTabBarItem = UITabBarItem(
+        title: NSLocalizedString("Tab.statistics", comment: ""),
+        image: UIImage(systemName: "chart.bar.fill"),
+        tag: 2
+    )
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,9 +34,20 @@ final class TabBarController: UITabBarController {
         let catalogController = TestCatalogViewController(
             servicesAssembly: servicesAssembly
         )
-        catalogController.tabBarItem = catalogTabBarItem
+        let catalogNavigationController = UINavigationController(rootViewController: catalogController)
+        catalogNavigationController.tabBarItem = catalogTabBarItem
 
-        viewControllers = [profileNavigationController, catalogController]
+        let statisticsController = StatisticsAssembly(
+            servicesAssembler: servicesAssembly
+        ).build()
+        let statisticsNavigationController = UINavigationController(rootViewController: statisticsController)
+        statisticsNavigationController.tabBarItem = statisticsTabBarItem
+
+        viewControllers = [
+            profileNavigationController,
+            catalogNavigationController,
+            statisticsNavigationController
+        ]
 
         view.backgroundColor = .systemBackground
     }
