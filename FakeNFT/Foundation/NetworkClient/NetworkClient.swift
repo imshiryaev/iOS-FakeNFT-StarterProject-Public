@@ -110,6 +110,8 @@ struct DefaultNetworkClient: NetworkClient {
     // MARK: - Private
 
     private func create(request: NetworkRequest) -> URLRequest? {
+        print(Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "")
+        print(Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String ?? "")
         guard let endpoint = request.endpoint else {
             assertionFailure("Empty endpoint")
             return nil

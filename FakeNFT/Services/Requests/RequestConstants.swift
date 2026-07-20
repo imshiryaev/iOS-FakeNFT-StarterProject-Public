@@ -5,7 +5,7 @@ enum RequestConstants {
     static let baseURL = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? ""
 
     static var token: String {
-        guard let token = Bundle.main.object(forInfoDictionaryKey: "TOKEN") as? String, !token.isEmpty
+        guard let token = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String, !token.isEmpty
         else {
             fatalError(
                 """

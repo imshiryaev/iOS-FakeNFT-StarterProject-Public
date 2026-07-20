@@ -33,7 +33,7 @@ final class NftListLoader {
             syncQueue.async {
                 switch result {
                 case .success(let users):
-                    users.forEach { authorsById[$0.id] = $0.name }
+                    users.forEach { authorsById["\($0.id)"] = $0.name }
                 case .failure(let error):
                     usersError = error
                 }
